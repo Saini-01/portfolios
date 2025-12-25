@@ -7,8 +7,6 @@ root.title("Asset Tracker")
 root.geometry("525x325")
 root.configure(bg="#2b2b2b")
 
-kalshi_values = main.values()
-
 label = tk.Label(
     root,
     text="",
@@ -31,7 +29,7 @@ kalshi_label = tk.Label(
 kalshi_label.pack(anchor='nw', padx = 20, pady = 5)
 
 def kalshi_button_clicked():
-    template = template = f"Cash: ${kalshi_values['cash']}\nInvested: ${kalshi_values['invested']}\nTransferred: ${kalshi_values['transferred']}"
+    template = f"Cash: ${main.values()['cash']}\nInvested: ${main.values()['invested']}\nTransferred: ${main.values()['transferred']}"
     kalshi_label.config(text=template)
 
 def coinbase_button_clicked():
@@ -48,13 +46,21 @@ def updateWelcome():
     hour = now.tm_hour
     current = ""
     if 0 <= hour < 12:
-        current = "morning"
+        current = "Morning"
     elif 12 <= hour < 17:
-        current = "afternoon"
+        current = "Afternoon"
     else:
-        current = "evening"
-    label.config(text="Good " + current + "!")
+        current = "Evening"
+    label.config(text="Good " + current + "!", font=("Arial", 15))
     root.after(1000, updateWelcome)
 
+def update_kalshi_data():
+    data = main.values()
+    template = f"Cash: ${main.values()['cash']}\nInvested: ${main.values()['invested']}\nTransferred: ${main.values()['transferred']}"
+    kalshi_label.config(text=template)
+    
+    root.after(5000, update_kalshi_data)
+    
+root.after(0, update_kalshi_data)
 root.after(0, updateWelcome)
 root.mainloop()
