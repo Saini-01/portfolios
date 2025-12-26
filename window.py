@@ -6,6 +6,7 @@ root = tk.Tk()
 root.title("Asset Tracker")
 root.geometry("525x325")
 root.configure(bg="#2b2b2b")
+root.resizable(False, False)
 
 label = tk.Label(
     root,
@@ -18,19 +19,40 @@ label.pack(anchor='nw', padx=20, pady=10)
 button_frame = tk.Frame(root, bg="#2b2b2b")
 button_frame.pack(anchor='nw', padx=20)
 
+info_frame = tk.Frame(root, bg="#2b2b2b")
+info_frame.pack(anchor='nw', padx=20, pady=0)
+
+
 kalshi_label = tk.Label(
-    root,
+    info_frame, 
     text="",
     fg="white",
     bg="#2b2b2b",
     justify="left"
 )
 
-kalshi_label.pack(anchor='nw', padx = 20, pady = 5)
+kalshi_logo = tk.Label(
+    root,  
+    text="",
+    fg="#4DE4B2",
+    bg="#2b2b2b",
+    justify="right"
+)
+
+kalshi_label.pack(side=tk.LEFT, padx = 0, pady = 0)
+kalshi_logo.place(x=300, y=35)
+kalshi_logo.config(font=('Courier', 11))
 
 def kalshi_button_clicked():
     template = f"Cash: ${main.values()['cash']}\nInvested: ${main.values()['invested']}\nTransferred: ${main.values()['transferred']}"
     kalshi_label.config(text=template)
+    kalshi_logo.config(text="""██╗  ██╗
+██║ ██╔╝
+█████╔╝ 
+██╔═██╗ 
+██║  ██╗
+╚═╝  ╚═╝""")
+    root.after(0, update_kalshi_data)
 
 def coinbase_button_clicked():
     print("Coinbase was clicked")
@@ -56,11 +78,9 @@ def updateWelcome():
 
 def update_kalshi_data():
     data = main.values()
-    template = f"Cash: ${main.values()['cash']}\nInvested: ${main.values()['invested']}\nTransferred: ${main.values()['transferred']}"
+    template = f"Cash: ${data['cash']}\nInvested: ${data['invested']}\nTransferred: ${data['transferred']}"
     kalshi_label.config(text=template)
-    
     root.after(5000, update_kalshi_data)
-    
-root.after(0, update_kalshi_data)
+
 root.after(0, updateWelcome)
 root.mainloop()
