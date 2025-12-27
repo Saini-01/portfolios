@@ -1,5 +1,5 @@
 import tkinter as tk
-import main
+import kalshi
 import time
 
 root = tk.Tk()
@@ -41,16 +41,37 @@ kalshi_logo = tk.Label(
     font=('Courier', 11)
 )
 
+kalshi_price_negative = tk.Label(
+    root,  
+    text="",
+    fg="#FF0000",
+    bg="#2b2b2b",
+    justify="right",
+    font=('Courier', 11)
+)
+
+kalshi_price_positive = tk.Label(
+    root,  
+    text="",
+    fg="#00FF33",
+    bg="#2b2b2b",
+    justify="right",
+    font=('Courier', 11)
+)
+
+
 kalshi_label.pack(side=tk.LEFT, padx=0, pady=0)
 kalshi_logo.place(x=300, y=35)
+kalshi_price_negative.place(x=125, y=153)
+kalshi_price_positive.place(x=125, y=153)
 
 def kalshi_button_clicked():
-    if main.values()['transferred'] > (main.values()['cash'] + main.values()['invested']):
+    if kalshi.values()['transferred'] > (kalshi.values()['cash'] + kalshi.values()['invested']):
         signToUse = "-"
     else:
         signToUse = "+"
-    updown = main.values()['transferred'] - (main.values()['cash'] + main.values()['invested'])
-    template = f"Cash: ${main.values()['cash']}\nInvested: ${main.values()['invested']}\nTransferred: ${main.values()['transferred']}\n\nTotal Change: {signToUse}${updown:.2f}"
+    updown = kalshi.values()['transferred'] - (kalshi.values()['cash'] + kalshi.values()['invested'])
+    template = f"Cash: ${kalshi.values()['cash']}\nInvested: ${kalshi.values()['invested']}\nTransferred: ${kalshi.values()['transferred']}\n\n\nNet Change: {signToUse}${updown:.2f}"
     kalshi_label.config(text=template)
     kalshi_logo.config(text="""██╗  ██╗
 ██║ ██╔╝
@@ -93,14 +114,18 @@ def updateWelcome():
     root.after(1000, updateWelcome)
 
 def update_kalshi_data():
-    data = main.values()
-    if main.values()['transferred'] > (main.values()['cash'] + main.values()['invested']):
+    data = kalshi.values()
+    if kalshi.values()['transferred'] > (kalshi.values()['cash'] + kalshi.values()['invested']):
         signToUse = "-"
     else:
         signToUse = "+"
-    updown = main.values()['transferred'] - (main.values()['cash'] + main.values()['invested'])
-    template = f"Cash: ${data['cash']}\nInvested: ${data['invested']}\nTransferred: ${data['transferred']}\n\nTotal Change: {signToUse}${updown:.2f}"
+    updown = kalshi.values()['transferred'] - (kalshi.values()['cash'] + kalshi.values()['invested'])
+    template = f"Cash: ${data['cash']}\nInvested: ${data['invested']}\nTransferred: ${data['transferred']}\n\n\nNet Change:"
     kalshi_label.config(text=template)
+    if signToUse == "-":
+        kalshi_price_negative.config(text=f"{signToUse}${updown:.2f}")
+    if signToUse == "+":
+        kalshi_price_positive.config(text=f"{signToUse}${updown:.2f}")
     root.after(5000, update_kalshi_data)
 
 root.after(0, updateWelcome)
